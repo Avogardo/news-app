@@ -114,7 +114,6 @@ class App extends Component {
       this.createAdmin();
     }
 
-
     return (
       <div>
         <h1>Lolnet</h1>

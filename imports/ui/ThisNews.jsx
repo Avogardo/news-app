@@ -34,7 +34,7 @@ class ThisNews extends Component {
         const currentUserId = this.props.currentUser && this.props.currentUser._id;
         const idAdmin = this.props.currentUser && this.props.currentUser.profile.flag;
 
-        return <div>
+        return <article>
             <h1>{result[0].header}</h1>
             <p>{result[0].text}</p>
 
@@ -44,7 +44,7 @@ class ThisNews extends Component {
               </button>
             ) : ''}
 
-        </div>
+        </article>
       } else {
         return <p>This news has been removed.</p>
       }

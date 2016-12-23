@@ -28,7 +28,7 @@ componentWillMount() {
         const idRedactor = this.props.currentUser && this.props.currentUser.profile.flag;
 
     return (
-        <div>
+        <article>
             <h1><Link to={'/news/'+this.props.news._id}>{this.props.news.header}</Link></h1>
             <p>{this.props.news.text}</p>
 
@@ -37,7 +37,7 @@ componentWillMount() {
                 remove
               </button>
             ) : ''}
-        </div>
+        </article>
     )
   }
 }
