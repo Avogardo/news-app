@@ -100,6 +100,7 @@ Meteor.methods({
     check(newsId, String);
 
     News.remove(newsId);
+    Comments.remove({newsId: newsId});
   },
 
   'news.removeEntire'() {
