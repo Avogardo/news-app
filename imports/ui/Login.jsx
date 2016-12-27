@@ -66,35 +66,32 @@ class Login extends Component {
   render() {
     return (
       <div>
-            {!this.props.currentUser ?
-              <div>
-                <h3>Sign up</h3>
-                <Link to="/signup">sign</Link>
-              </div> : ''
-            }
-
-            {this.props.currentUser ?
-              <div>
-                <h3>Log out</h3>
-                <form onSubmit={this.logOut}>
-                  <input type="submit" value="Log out" />
-                </form>
-              </div> : ''
-            }
-
+        {!this.props.currentUser ?
           <div>
-            {this.logIn()}
-          </div>
-
+            <h3>Sign up</h3>
+            <Link to="/signup">sign</Link>
+          </div> :
           <div>
-            {!this.props.currentUser ?
-                  <form onSubmit={this.logInGoogle}>
-                <h3>Log in with google</h3>
-                  <input type="submit" value="Log in with google" />
-                </form>
-              : ''
-              }
+            <p>Wellcome <b><Link to={'/users/'+this.props.currentUser._id}>{this.props.currentUser.profile.name}</Link></b></p>
+            <form onSubmit={this.logOut}>
+              <input type="submit" value="Log out" />
+            </form>
           </div>
+        }
+
+        <div>
+          {this.logIn()}
+        </div>
+
+        <div>
+          {!this.props.currentUser ?
+            <form onSubmit={this.logInGoogle}>
+              <h3>Log in with google</h3>
+              <input type="submit" value="Log in with google" />
+            </form>
+            : ''
+          }
+        </div>
       </div>
     );
   }
