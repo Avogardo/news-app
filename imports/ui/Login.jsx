@@ -79,9 +79,7 @@ class Login extends Component {
           </div>
         }
 
-        <div>
           {this.logIn()}
-        </div>
 
         <div>
           {!this.props.currentUser ?

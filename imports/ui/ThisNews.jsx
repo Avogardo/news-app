@@ -60,7 +60,7 @@ class ThisNews extends Component {
 
         return result.map((comment) => {
           return <li key={comment._id}>
-            <p>{moment(comment.createdAt).calendar()}</p>
+            <p><time>{moment(comment.createdAt).calendar()}</time></p>
             <strong>{comment.owner}</strong>: {comment.text}
             <br />
             {currentUserId === comment.ownerId || idAdmin === 'admin' ? (
@@ -109,12 +109,15 @@ class ThisNews extends Component {
         { this.props.currentUser ?
           <form onSubmit={this.submitComment}>
 
-            <input
-              type="text"
-              ref="textInput"
-              placeholder="Write some comment"
-              required
-            /> <br />
+          	<textarea 
+          	rows="4" 
+          	cols="40" 
+          	ref="textInput"
+          	placeholder="Write some comment [150]"
+          	maxLength="150"
+          	wrap="hard"
+          	required
+          	/>
 
             <input type="submit" value="Submit comment" />
           </form> : ''
