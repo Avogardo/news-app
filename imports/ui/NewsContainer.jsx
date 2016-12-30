@@ -17,10 +17,6 @@ showText(x) {
   }
 }
 
-componentWillMount() {
-    //console.log(this.props.news._id);
-}
-
   render() {
 
         const currentUserId = this.props.currentUser && this.props.currentUser._id;
@@ -46,8 +42,6 @@ NewsContainer.propTypes = {
   currentUser: PropTypes.object,
   thisnews: PropTypes.array.isRequired,
 };
-
-
 
 export default createContainer(() => {
   return {

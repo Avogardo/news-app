@@ -70,6 +70,21 @@ class App extends Component {
             'Jak tam giera hehe LOL kek juh juh naoah tra ta ta');
   }
 
+  isRedactor() {
+    if(this.props.currentUser) {
+
+      if(this.props.currentUser.profile.flag === 'admin' || this.props.currentUser.profile.flag === 'redactor') {
+        return          <button onClick={() => browserHistory.push('/compose')}>
+          Redactor panel
+        </button>
+      } else {
+        return ''
+      }
+    } else {
+      return ''
+    }
+  }
+
   render() {
 
     if(!this.props.currentUser){
@@ -82,12 +97,11 @@ class App extends Component {
 
         <Login />
 
-        <NewsInserter />
+        {this.isRedactor()}
 
         <ul>
           {this.renderNews()}
         </ul>
-
 
 
         <br /><br />

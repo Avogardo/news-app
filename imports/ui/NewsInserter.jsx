@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 're
 import { Accounts } from 'meteor/accounts-base'
 import { createContainer } from 'meteor/react-meteor-data'
 import { News } from '../api/collectionfuncs.js';
-
+import Login from './Login.jsx';
 
 class NewsInserter extends Component {
 
@@ -53,19 +53,23 @@ class NewsInserter extends Component {
             placeholder="Add news head"
             required
           /> <br />
-          <input
-            type="text"
-            ref="textInput"
-            placeholder="Add news content"
+
+          <textarea 
+          rows="30" 
+          cols="70" 
+          ref="textInput"
+          placeholder="Add news content"
+          wrap="hard"
+          required
           /> <br />
 
           <input type="submit" value="Submit news" />
         </form>
       } else {
-        return ''
+        return <p>You have no premission</p>
       }
     } else {
-      return ''
+      return <p>Log in please</p>
     }
   }
 
@@ -73,6 +77,10 @@ class NewsInserter extends Component {
 
     return (
       <div>
+        <h1><Link to="/">Lolnet</Link></h1>
+
+        <Login />
+
         <p>Ony redactor can type news</p>
         {this.redactorPanel()}
 
