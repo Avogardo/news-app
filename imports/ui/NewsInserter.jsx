@@ -5,6 +5,8 @@ import { Accounts } from 'meteor/accounts-base'
 import { createContainer } from 'meteor/react-meteor-data'
 import { News } from '../api/collectionfuncs.js';
 import Login from './Login.jsx';
+import ContentEditable from 'react-contenteditable';
+
 
 class NewsInserter extends Component {
 
@@ -13,17 +15,26 @@ class NewsInserter extends Component {
       this.submitNews = this.submitNews.bind(this);
       this.showcollection = this.showcollection.bind(this);
       this.clear = this.clear.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+      this.headStateSet = this.headStateSet.bind(this);
+
+      this.state = {
+        headContent: '',
+        newsContent: '',
+      };
   }
 
   submitNews(e) {
     e.preventDefault();
 
-    const header = ReactDOM.findDOMNode(this.refs.headerInput).value.trim();
-    const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
+    const header = this.state.headContent;
+    const text = this.state.newsContent;
 
     Meteor.call('news.insert', header, text);
-    ReactDOM.findDOMNode(this.refs.headerInput).value = '';
-    ReactDOM.findDOMNode(this.refs.textInput).value = '';
+    this.setState({
+      headContent: '',
+      newsContent: '',
+    });
   }
 
   clear(e) {
@@ -41,26 +52,38 @@ class NewsInserter extends Component {
     console.log(this.props.userList[0].profile.name);
   }
 
+  handleChange(e) {
+    e.preventDefault();
+
+    this.setState({
+      newsContent: e.target.value
+    });
+  }
+
+  headStateSet(e) {
+    e.preventDefault();
+
+    this.setState({
+      headContent: e.target.value
+    });
+  }
+
   redactorPanel() {
     if(this.props.currentUser) {
 
       if(this.props.currentUser.profile.flag === 'admin' || this.props.currentUser.profile.flag === 'redactor') {
         return  <form onSubmit={this.submitNews}>
           <h3>Redactor main panel</h3>
-          <input
-            type="text"
-            ref="headerInput"
-            placeholder="Add news head"
-            required
+          <ContentEditable
+                id="headInsertBox"
+                html={this.state.headContent}
+                onChange={this.headStateSet}
           /> <br />
 
-          <textarea 
-          rows="30" 
-          cols="70" 
-          ref="textInput"
-          placeholder="Add news content"
-          wrap="hard"
-          required
+          <ContentEditable
+                id="newsInsertBox"
+                html={this.state.newsContent}
+                onChange={this.handleChange}
           /> <br />
 
           <input type="submit" value="Submit news" />

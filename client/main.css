@@ -1,1 +1,13 @@
 /* CSS declarations go here */
+#headInsertBox
+{
+    max-width : 500px;
+	border : 1px solid;
+}
+
+#newsInsertBox {
+    max-width : 500px;
+    min-height: 300px;
+	border : 1px solid;
+	margin-bottom: 5px;
+}

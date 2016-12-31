@@ -17,6 +17,14 @@ showText(x) {
   }
 }
 
+createHead() {
+  return {__html: this.props.news.header};
+}
+
+createNews() {
+  return {__html: this.props.news.text};
+}
+
   render() {
 
         const currentUserId = this.props.currentUser && this.props.currentUser._id;
@@ -25,8 +33,9 @@ showText(x) {
 
     return (
         <article>
-            <h1><Link to={'/news/'+this.props.news._id}>{this.props.news.header}</Link></h1>
-            <p>{this.props.news.text}</p>
+            <Link to={'/news/'+this.props.news._id}><h1 dangerouslySetInnerHTML={this.createHead()} /></Link>
+            <div dangerouslySetInnerHTML={this.createNews()} />
+            
 
             {currentUserId ===  (this.props.news.ownerId && idRedactor === 'redactor') || idAdmin === 'admin' ? (
               <button onClick={() => Meteor.call('news.remove', this.props.news._id)}>
