@@ -33,8 +33,8 @@ class ThisNews extends Component {
         const idAdmin = this.props.currentUser && this.props.currentUser.profile.flag;
 
         return <article>
-            <h1>{result[0].header}</h1>
-            <p>{result[0].text}</p>
+            <h1 dangerouslySetInnerHTML={this.createHead(result[0].header)} />
+            <p dangerouslySetInnerHTML={this.createHead(result[0].text)} />
 
             {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? (
               <button onClick={() => Meteor.call('news.remove', this.state.linkid)}>
@@ -47,6 +47,14 @@ class ThisNews extends Component {
         return <p>This news has been removed.</p>
       }
   }
+
+createHead(head) {
+  return {__html: head};
+}
+
+createNews(text) {
+  return {__html: text};
+}
 
   render() {
 
