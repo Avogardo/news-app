@@ -1,6 +1,6 @@
 ## Packages
 
--accounts-password
+- (#accounts-password)
 -react-meteor-data
 -reywood:publish-composite
 -momentjs:moment
