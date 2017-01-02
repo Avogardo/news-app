@@ -1,11 +1,13 @@
 ## Packages
-accounts-password
-react-meteor-data
-reywood:publish-composite
-momentjs:moment
-accounts-google
-service-configuration
-email
+
+-accounts-password
+-react-meteor-data
+-reywood:publish-composite
+-momentjs:moment
+-accounts-google
+-service-configuration
+-email
+-react-contenteditable
 
 
 ## Admin account
