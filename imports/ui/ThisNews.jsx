@@ -10,7 +10,6 @@ class ThisNews extends Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
           linkid: "",
         };
@@ -23,7 +22,7 @@ class ThisNews extends Component {
     }
 
   renderNews(id) {
-      
+
         let result = this.props.news.filter(function( obj ) {
           return obj._id == id;
         });

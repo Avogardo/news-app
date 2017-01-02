@@ -74,7 +74,8 @@ class App extends Component {
     if(this.props.currentUser) {
 
       if(this.props.currentUser.profile.flag === 'admin' || this.props.currentUser.profile.flag === 'redactor') {
-        return          <button onClick={() => browserHistory.push('/compose')}>
+        return
+        <button onClick={() => browserHistory.push('/compose')}>
           Redactor panel
         </button>
       } else {

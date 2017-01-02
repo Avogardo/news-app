@@ -10,13 +10,13 @@ class SignUp extends Component {
 
     constructor(props) {
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.showcollection = this.showcollection.bind(this);
-        this.clear = this.clear.bind(this);
-
         this.state = {
           wasCreated: false,
         };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.showcollection = this.showcollection.bind(this);
+        this.clear = this.clear.bind(this);
     }
 
   handleSubmit(e) {

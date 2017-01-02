@@ -12,16 +12,16 @@ class NewsInserter extends Component {
 
   constructor(props) {
       super(props);
+      this.state = {
+        headContent: '',
+        newsContent: '',
+      };
+
       this.submitNews = this.submitNews.bind(this);
       this.showcollection = this.showcollection.bind(this);
       this.clear = this.clear.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.headStateSet = this.headStateSet.bind(this);
-
-      this.state = {
-        headContent: '',
-        newsContent: '',
-      };
   }
 
   submitNews(e) {
