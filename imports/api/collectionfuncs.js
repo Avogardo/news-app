@@ -90,11 +90,12 @@ Meteor.methods({
     Meteor.users.remove({})
   },
 
-  'news.insert'(header, text) {
-    check([header, text], [String]);
+  'news.insert'(header, intro, text) {
+    check([header, intro, text], [String]);
 
     News.insert({
       header,
+      intro,
       text,
       owner: Meteor.users.findOne(this.userId).username || Meteor.users.findOne(this.userId).profile.name,
       createdAt: new Date(),

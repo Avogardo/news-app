@@ -5,6 +5,13 @@
 	border : 1px solid;
 }
 
+#introInsertBox
+{
+    max-width : 500px;
+    min-height: 75px;
+    border : 1px solid;
+}
+
 #newsInsertBox {
     max-width : 500px;
     min-height: 300px;

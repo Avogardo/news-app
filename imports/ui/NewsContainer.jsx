@@ -13,7 +13,7 @@ showHeader(x) {
 
 showText(x) {
   if(typeof x[0] !== 'undefined') {
-    return x[0].text
+    return x[0].intro
   }
 }
 
@@ -21,8 +21,20 @@ createHead() {
   return {__html: this.props.news.header};
 }
 
-createNews() {
-  return {__html: this.props.news.text};
+createNews(news) {
+  if(!news.intro) {
+    if(news.text.length <= 200) {
+      return {__html:
+        news.text
+      };
+    } else {
+      return {__html:
+        news.text.slice(0, 200)+'...'
+      };
+    }
+  } else {
+    return {__html: news.intro};
+  }
 }
 
   render() {
@@ -34,8 +46,8 @@ createNews() {
     return (
         <article>
             <Link to={'/news/'+this.props.news._id}><h1 dangerouslySetInnerHTML={this.createHead()} /></Link>
-            <div dangerouslySetInnerHTML={this.createNews()} />
-            
+            <div dangerouslySetInnerHTML={this.createNews(this.props.news)} />
+
 
             {currentUserId ===  (this.props.news.ownerId && idRedactor === 'redactor') || idAdmin === 'admin' ? (
               <button onClick={() => Meteor.call('news.remove', this.props.news._id)}>

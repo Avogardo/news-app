@@ -14,6 +14,7 @@ class NewsInserter extends Component {
       super(props);
       this.state = {
         headContent: '',
+        introContent: '',
         newsContent: '',
       };
 
@@ -21,6 +22,7 @@ class NewsInserter extends Component {
       this.showcollection = this.showcollection.bind(this);
       this.clear = this.clear.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.introStateSet = this.introStateSet.bind(this);
       this.headStateSet = this.headStateSet.bind(this);
   }
 
@@ -28,11 +30,13 @@ class NewsInserter extends Component {
     e.preventDefault();
 
     const header = this.state.headContent;
+    const intro = this.state.introContent
     const text = this.state.newsContent;
 
-    Meteor.call('news.insert', header, text);
+    Meteor.call('news.insert', header, intro, text);
     this.setState({
       headContent: '',
+      introContent: '',
       newsContent: '',
     });
   }
@@ -60,6 +64,14 @@ class NewsInserter extends Component {
     });
   }
 
+  introStateSet (e) {
+    e.preventDefault();
+
+    this.setState({
+      introContent: e.target.value
+    });
+  }
+
   headStateSet(e) {
     e.preventDefault();
 
@@ -78,6 +90,12 @@ class NewsInserter extends Component {
                 id="headInsertBox"
                 html={this.state.headContent}
                 onChange={this.headStateSet}
+          /> <br />
+
+          <ContentEditable
+                id="introInsertBox"
+                html={this.state.introContent}
+                onChange={this.introStateSet}
           /> <br />
 
           <ContentEditable
