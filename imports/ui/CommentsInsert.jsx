@@ -24,9 +24,17 @@ class CommentsInsert extends Component {
         });
 
         return result.map((comment) => {
+
+let content = comment.text.replace( /\n/g, '<br>');
+console.log(content);
+
+
+
+
+
           return <li key={comment._id}>
             <p><time>{moment(comment.createdAt).calendar()}</time></p>
-            <strong>{comment.owner}</strong>: {comment.text}
+            <strong>{comment.owner}</strong>: <div id={comment._id} dangerouslySetInnerHTML={this.innetText(content)} />
             <br />
             {currentUserId === comment.ownerId || idAdmin === 'admin' ? (
               <button onClick={() => Meteor.call('comment.remove', comment._id)}>
@@ -37,6 +45,10 @@ class CommentsInsert extends Component {
           </li>
         });
       }
+  }
+
+  innetText(text) {
+    return {__html: text};
   }
 
   submitComment(e) {
@@ -50,15 +62,15 @@ class CommentsInsert extends Component {
   }
 
   clear(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        Meteor.call('comments.removeEntire');
+    Meteor.call('comments.removeEntire');
   }
 
   showcomments(e) {
-      e.preventDefault();
+    e.preventDefault();
 
-      console.log(this.props.comments);
+    console.log(this.props.comments);
   }
 
   render() {
