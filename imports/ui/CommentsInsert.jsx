@@ -24,13 +24,7 @@ class CommentsInsert extends Component {
         });
 
         return result.map((comment) => {
-
-let content = comment.text.replace( /\n/g, '<br>');
-console.log(content);
-
-
-
-
+          let content = comment.text.replace( /\n/g, '<br>');
 
           return <li key={comment._id}>
             <p><time>{moment(comment.createdAt).calendar()}</time></p>
