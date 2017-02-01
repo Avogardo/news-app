@@ -123,9 +123,21 @@ Meteor.methods({
   'comments.insert'(newsId, text) {
     check([newsId, text], [String]);
 
+    let input = text;
+    input = input.replace(/</g, '&lt;');
+    input = input.replace(/>/g, '&gt;');
+
+    input = input.replace(/\[b]/g, '<b>');
+    input = input.replace(/\[\/b]/g, '</b>');
+
+    input = input.replace(/\[i]/g, '<i>');
+    input = input.replace(/\[\/i]/g, '</i>');
+
+    input = input.replace(/\r?\n/g, '<br>');
+
     Comments.insert({
       newsId,
-      text,
+      text: input,
       owner: Meteor.users.findOne(this.userId).username || Meteor.users.findOne(this.userId).profile.name,
       ownerId: Meteor.users.findOne(this.userId)._id || Meteor.users.findOne(this.userId)._id,
       createdAt: new Date(),

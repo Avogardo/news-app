@@ -8,12 +8,12 @@ import { Comments } from '../api/collectionfuncs.js';
 
 class CommentsInsert extends Component {
 
-    constructor(props) {
-        super(props);
-        this.submitComment = this.submitComment.bind(this);
-        this.showcomments = this.showcomments.bind(this);
-        this.clear = this.clear.bind(this);
-    }
+  constructor(props) {
+      super(props);
+      this.submitComment = this.submitComment.bind(this);
+      this.showcomments = this.showcomments.bind(this);
+      this.clear = this.clear.bind(this);
+  }
 
   renderComments(id) {
     const currentUserId = this.props.currentUser && this.props.currentUser._id;
@@ -26,7 +26,7 @@ class CommentsInsert extends Component {
         return result.map((comment) => {
           return <li key={comment._id}>
             <p><time>{moment(comment.createdAt).calendar()}</time></p>
-            <strong>{comment.owner}</strong>: {comment.text}
+            <strong>{comment.owner}</strong>: <div id={comment._id} dangerouslySetInnerHTML={this.innetText(comment.text)} />
             <br />
             {currentUserId === comment.ownerId || idAdmin === 'admin' ? (
               <button onClick={() => Meteor.call('comment.remove', comment._id)}>
@@ -37,6 +37,10 @@ class CommentsInsert extends Component {
           </li>
         });
       }
+  }
+
+  innetText(text) {
+    return {__html: text};
   }
 
   submitComment(e) {
@@ -72,9 +76,9 @@ class CommentsInsert extends Component {
         { this.props.currentUser ?
           <form onSubmit={this.submitComment}>
 
-          	<textarea 
-          	rows="4" 
-          	cols="40" 
+          	<textarea
+          	rows="4"
+          	cols="40"
           	ref="textInput"
           	placeholder="Write some comment [150]"
           	maxLength="150"
