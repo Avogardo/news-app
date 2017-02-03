@@ -5,12 +5,12 @@ import { Accounts } from 'meteor/accounts-base'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Comments } from '../api/collectionfuncs.js';
 
-
 class CommentsInsert extends Component {
 
   constructor(props) {
       super(props);
       this.submitComment = this.submitComment.bind(this);
+      //this.loko = this.loko.bind(this);
       this.showcomments = this.showcomments.bind(this);
       this.clear = this.clear.bind(this);
   }
@@ -24,19 +24,91 @@ class CommentsInsert extends Component {
         });
 
         return result.map((comment) => {
-          return <li key={comment._id}>
+          return <li key={comment._id} id={comment._id}>
             <p><time>{moment(comment.createdAt).calendar()}</time></p>
-            <strong>{comment.owner}</strong>: <div id={comment._id} dangerouslySetInnerHTML={this.innetText(comment.text)} />
+            <strong>{comment.owner}</strong>: <br /> <div ref={comment._id} dangerouslySetInnerHTML={this.innetText(comment.text)} />
             <br />
             {currentUserId === comment.ownerId || idAdmin === 'admin' ? (
-              <button onClick={() => Meteor.call('comment.remove', comment._id)}>
-                remove
-              </button>
+              <div>
+                <button ref={'remove_'+comment._id} onClick={() => Meteor.call('comment.remove', comment._id)}>
+                  remove
+                </button>
+                <button ref={'edit_'+comment._id} onClick={(e) => this.editComment(e, comment)}>
+                  edit
+                </button>
+              </div>
             ) : ''}
             <br /><br />
           </li>
         });
       }
+  }
+
+  editComment(e, comment) {
+    e.preventDefault();
+
+      let input = comment.text;
+
+      input = input.replace(/\<b>/g, '[b]');
+      input = input.replace(/\<\/b>/g, '[/b]');
+
+      input = input.replace(/\<i>/g, '[i]');
+      input = input.replace(/\<\/i>/g, '[</i>]');
+
+      input = input.replace(/&lt;/g, '<');
+      input = input.replace(/&gt;/g, '>');
+
+      input = input.replace(/\<br>/g, '\n');
+//new textarea
+    const sp1 = document.createElement("textarea");
+    sp1.ref = 'ta_'+comment._id;
+    let sp1_content = document.createTextNode(input);
+    sp1.appendChild(sp1_content);
+    const sp2 = ReactDOM.findDOMNode(this.refs[comment._id]);
+    const parentDiv = sp2.parentNode;
+    parentDiv.replaceChild(sp1, sp2);
+//new cancel
+    let cancel = document.createElement('button');
+    cancel.id = 'remove_'+comment._id;
+    const cancel_content = document.createTextNode('cancel');
+    cancel.onclick = function() {
+//back to div
+      const parentOldDiv = sp1.parentNode;
+      parentOldDiv.replaceChild(sp2, sp1);
+//back to remove
+      const parentOldRemove = cancel.parentNode;
+      parentOldRemove.replaceChild(remove, cancel);
+//back to edit
+      const parentOldEdit = update.parentNode;
+      parentOldEdit.replaceChild(edit, update);
+
+      return false;
+    };
+    cancel.appendChild(cancel_content);
+    const remove = ReactDOM.findDOMNode(this.refs[cancel.id]);
+    const parentRemove = remove.parentNode;
+    parentRemove.replaceChild(cancel, remove);
+//new update
+    let update = document.createElement('button');
+    update.id = 'edit_'+comment._id;
+    const edit_content = document.createTextNode('update');
+    update.onclick = function() {
+      Meteor.call('comment.update', comment._id, sp1.value);
+      const parentOldDiv = sp1.parentNode;
+      parentOldDiv.replaceChild(sp2, sp1);
+//back to remove
+      const parentOldRemove = cancel.parentNode;
+      parentOldRemove.replaceChild(remove, cancel);
+//back to edit
+      const parentOldEdit = update.parentNode;
+      parentOldEdit.replaceChild(edit, update);
+
+      return false;
+    };
+    update.appendChild(edit_content);
+    const edit = ReactDOM.findDOMNode(this.refs[update.id]);
+    const parentEdit = edit.parentNode;
+    parentEdit.replaceChild(update, edit);
   }
 
   innetText(text) {

@@ -1,27 +1,25 @@
-import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
-import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
-import { Accounts } from 'meteor/accounts-base'
-import { createContainer } from 'meteor/react-meteor-data'
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router';
+import { Accounts } from 'meteor/accounts-base';
+import { createContainer } from 'meteor/react-meteor-data';
 import { Email } from 'meteor/email';
 import { News } from '../api/collectionfuncs.js';
 import NewsContainer from './NewsContainer.jsx';
 import Login from './Login.jsx';
-import NewsInserter from './NewsInserter.jsx';
-
 
 class App extends Component {
 
   constructor(props) {
-      super(props);
-      this.showcollection = this.showcollection.bind(this);
-      this.clear = this.clear.bind(this);
-      this.sendEmail = this.sendEmail.bind(this);
+    super(props);
+    this.showcollection = this.showcollection.bind(this);
+    this.clear = this.clear.bind(this);
+    this.sendEmail = this.sendEmail.bind(this);
   }
 
   createAdmin() {
     if(typeof this.props.userList[0] !== 'undefined') {
-      let result = this.props.userList.filter(function( obj ) {
+      let result = this.props.userList.filter( function( obj ) {
         return obj.profile.flag === 'admin';
       });
 
@@ -87,7 +85,7 @@ class App extends Component {
 
   render() {
 
-    if(!this.props.currentUser){
+    if(!this.props.currentUser) {
       this.createAdmin();
     }
 
@@ -108,7 +106,7 @@ class App extends Component {
         <p>Test buttons</p>
         <form onSubmit={this.clear}><input type="submit" value="Clear news" /></form>
         <form onSubmit={this.showcollection}><input type="submit" value="Show collection" /></form>
-        <form onSubmit={this.sendEmail}><input type="submit" value="Send email (disable)" disabled/></form>
+        <form onSubmit={this.sendEmail}><input type="submit" value="Send email (disable)" disabled /></form>
       </div>
     );
   }

@@ -150,6 +150,25 @@ Meteor.methods({
     Comments.remove(commentId);
   },
 
+  'comment.update'(commentId, newtext) {
+    check(commentId, String);
+    check(newtext, String);
+
+    let input = newtext;
+    input = input.replace(/</g, '&lt;');
+    input = input.replace(/>/g, '&gt;');
+
+    input = input.replace(/\[b]/g, '<b>');
+    input = input.replace(/\[\/b]/g, '</b>');
+
+    input = input.replace(/\[i]/g, '<i>');
+    input = input.replace(/\[\/i]/g, '</i>');
+
+    input = input.replace(/\r?\n/g, '<br>');
+
+    Comments.update(commentId, { $set: { text: input } });
+  },
+
   'comments.removeEntire'() {
     Comments.remove({});
   },
