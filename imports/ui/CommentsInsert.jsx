@@ -62,6 +62,7 @@ class CommentsInsert extends Component {
 //new textarea
     const sp1 = document.createElement("textarea");
     sp1.ref = 'ta_'+comment._id;
+    sp1.maxLength = '150';
     let sp1_content = document.createTextNode(input);
     sp1.appendChild(sp1_content);
     const sp2 = ReactDOM.findDOMNode(this.refs[comment._id]);
