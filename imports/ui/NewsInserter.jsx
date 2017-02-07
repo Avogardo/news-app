@@ -85,19 +85,23 @@ class NewsInserter extends Component {
 
       if(this.props.currentUser.profile.flag === 'admin' || this.props.currentUser.profile.flag === 'redactor') {
         return  <form onSubmit={this.submitNews}>
-          <h3>Redactor main panel</h3>
+          <h2>Redactor main panel</h2>
+
+          <h3>Title</h3>
           <ContentEditable
                 id="headInsertBox"
                 html={this.state.headContent}
                 onChange={this.headStateSet}
-          /> <br />
+          />
 
+          <h3>Subtitle (optional)</h3>
           <ContentEditable
                 id="introInsertBox"
                 html={this.state.introContent}
                 onChange={this.introStateSet}
-          /> <br />
+          />
 
+          <h3>Content</h3>
           <ContentEditable
                 id="newsInsertBox"
                 html={this.state.newsContent}
@@ -115,7 +119,6 @@ class NewsInserter extends Component {
   }
 
   render() {
-
     return (
       <div>
         <h1><Link to="/">Lolnet</Link></h1>

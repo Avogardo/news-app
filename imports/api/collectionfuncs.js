@@ -93,13 +93,15 @@ Meteor.methods({
   'news.insert'(header, intro, text) {
     check([header, intro, text], [String]);
 
-    News.insert({
-      header,
-      intro,
-      text,
-      owner: Meteor.users.findOne(this.userId).username || Meteor.users.findOne(this.userId).profile.name,
-      createdAt: new Date(),
-    });
+    if( header && text ) {
+      News.insert({
+        header,
+        intro,
+        text,
+        owner: Meteor.users.findOne(this.userId).username || Meteor.users.findOne(this.userId).profile.name,
+        createdAt: new Date(),
+      });
+    }
   },
 
   'news.remove'(newsId) {
@@ -156,19 +158,21 @@ Meteor.methods({
     check(commentId, String);
     check(newtext, String);
 
-    let input = newtext;
-    input = input.replace(/</g, '&lt;');
-    input = input.replace(/>/g, '&gt;');
+    if( newtext.length <= 150) {
+      let input = newtext;
+      input = input.replace(/</g, '&lt;');
+      input = input.replace(/>/g, '&gt;');
 
-    input = input.replace(/\[b]/g, '<b>');
-    input = input.replace(/\[\/b]/g, '</b>');
+      input = input.replace(/\[b]/g, '<b>');
+      input = input.replace(/\[\/b]/g, '</b>');
 
-    input = input.replace(/\[i]/g, '<i>');
-    input = input.replace(/\[\/i]/g, '</i>');
+      input = input.replace(/\[i]/g, '<i>');
+      input = input.replace(/\[\/i]/g, '</i>');
 
-    input = input.replace(/\r?\n/g, '<br>');
+      input = input.replace(/\r?\n/g, '<br>');
 
-    Comments.update(commentId, { $set: { text: input } });
+      Comments.update(commentId, { $set: { text: input } });
+    }
   },
 
   'comments.removeEntire'() {
