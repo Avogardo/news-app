@@ -1,9 +1,15 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
 import { createContainer } from 'meteor/react-meteor-data'
 
-
 class Users extends Component {
+
+    showcollection(e) {
+        e.preventDefault();
+
+        console.log(this.props.userList);
+    }
 
     render() {
         return (
@@ -16,12 +22,26 @@ class Users extends Component {
                     </div> :
 
                     <div>
-                        <h2>Hi {this.props.currentUser.profile.flag} {this.props.currentUser.profile.name}!</h2>
-                        <p>Here you can customize your account.</p>
-                        <p>{this.props.params.userId}</p>
+                    	<h2>Hi {this.props.currentUser.profile.flag  || 'user'} {this.props.currentUser.profile.name}!</h2>
+						<ul>
+						  <li><Link to={'/users/main/'+this.props.currentUser._id}>Preview</Link></li>
+						  <li>Options</li>
+						  	<ul>
+						  		<li><Link to={'/users/change-name/'+this.props.currentUser._id}>Change name</Link></li>
+						  		<li><Link to={'/users/change-email/'+this.props.currentUser._id}>Change email</Link></li>
+						  		<li><Link to={'/users/change-password/'+this.props.currentUser._id}>Change password</Link></li>
+						  	</ul>
+						</ul>
+
+                        <div>
+                          {this.props.children}
+                        </div>
+
+                        <br /><br /> <p>Test button</p>
+                        <form onSubmit={(e) => this.showcollection(e)}><input type="submit" value="Show collection" /></form>
                     </div>
                 }
-
+                
             </div>
         );
     }
@@ -29,10 +49,12 @@ class Users extends Component {
 
 Users.propTypes = {
   currentUser: PropTypes.object,
+  userList: PropTypes.array.isRequired,
 };
 
 export default createContainer(() => {
   return {
     currentUser: Meteor.user(),
+    userList: Meteor.users.find({}).fetch(),
   };
 }, Users);

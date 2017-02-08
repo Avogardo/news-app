@@ -81,5 +81,4 @@ export default createContainer(() => {
   };
 }, ThisNews);
 
-
 Meteor.subscribe('news');

@@ -46,8 +46,6 @@ class SignUp extends Component {
         e.preventDefault();
 
         console.log(this.props.userList);
-
-        //browserHistory.push('/');
     }
 
   render() {
@@ -109,6 +107,5 @@ export default createContainer(() => {
     userList: Meteor.users.find({}).fetch(),
   };
 }, SignUp);
-
 
 Meteor.subscribe('userList');
