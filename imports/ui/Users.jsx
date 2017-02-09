@@ -11,6 +11,24 @@ class Users extends Component {
         console.log(this.props.userList);
     }
 
+    isGoogleUser(user) {
+    	if(user.profile.flag) {
+    		return <ul>
+    					<li><Link to={'/users/main/'+this.props.currentUser._id}>Preview</Link></li>
+    					<li>Options</li>
+						  	<ul>
+						  		<li><Link to={'/users/change-name/'+this.props.currentUser._id}>Change name</Link></li>
+						  		<li><Link to={'/users/change-email/'+this.props.currentUser._id}>Change email</Link></li>
+						  		<li><Link to={'/users/change-password/'+this.props.currentUser._id}>Change password</Link></li>
+						  	</ul>
+					</ul>
+    	} else {
+    		return <ul>
+    					<li><Link to={'/users/main/'+this.props.currentUser._id}>Preview</Link></li>
+					</ul>
+    	}
+    }
+
     render() {
         return (
             <div>
@@ -23,16 +41,9 @@ class Users extends Component {
 
                     <div>
                     	<h2>Hi {this.props.currentUser.profile.flag  || 'user'} {this.props.currentUser.profile.name}!</h2>
-						<ul>
-						  <li><Link to={'/users/main/'+this.props.currentUser._id}>Preview</Link></li>
-						  <li>Options</li>
-						  	<ul>
-						  		<li><Link to={'/users/change-name/'+this.props.currentUser._id}>Change name</Link></li>
-						  		<li><Link to={'/users/change-email/'+this.props.currentUser._id}>Change email</Link></li>
-						  		<li><Link to={'/users/change-password/'+this.props.currentUser._id}>Change password</Link></li>
-						  	</ul>
-						</ul>
-
+						  
+						{this.isGoogleUser(this.props.currentUser)}
+						
                         <div>
                           {this.props.children}
                         </div>

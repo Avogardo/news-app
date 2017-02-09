@@ -36,7 +36,6 @@ class ThisUser extends Component {
                         <ul>
                             <li>Name: {this.props.currentUser.profile.name}</li>
                             <li>Flag: {this.props.currentUser.profile.flag || 'Google user'}</li>
-                            <li>Id: {this.props.params.userId}</li>
                             <li>Email: {this.showEmail(this.props.currentUser)}</li>
                             {this.isVerified(this.props.currentUser)}
                         </ul>

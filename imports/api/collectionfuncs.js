@@ -74,6 +74,33 @@ Meteor.methods({
       }
   },
 
+  'user.updateName'(userId, userFlag, username) {
+    check([userId, userFlag, username], [String]);
+
+    if( username !== Meteor.user().profile.name ) {
+      Meteor.users.update(userId, { 
+        $set: { profile: {
+          flag: userFlag,
+          name: username }
+        } 
+      });
+    } else {
+      console.log('error');
+    }
+  },
+
+  'user.updateEmail'(userId, verified, oldEmail, email) {
+    check([userId, oldEmail, email], [String]);
+    check(verified, Boolean);
+
+    if( email !== Meteor.user().emails[0].email ) {
+      Meteor.users.update({ _id: Meteor.userId(), 'emails.0.address': oldEmail },
+      { $set: { 'emails.0.address': email }});
+    } else {
+      console.log('error');
+    }
+  },
+
   'user.login'(email, password) {
     check([email, password], [String]);
 
