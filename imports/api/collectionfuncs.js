@@ -101,6 +101,25 @@ Meteor.methods({
     }
   },
 
+  'user.checkPassword'(digest) {
+    check(digest, String);
+
+    if (this.userId) {
+      const user = Meteor.user();
+      const password = {digest: digest, algorithm: 'sha-256'};
+      const result = Accounts._checkPassword(user, password);
+      return result.error == null;
+    } else {
+      return false;
+    }
+  },
+
+  'user.changePassword'(userId, newPassword) {
+    check([userId, newPassword], [String]);
+
+    Accounts.setPassword(userId, newPassword)
+  },
+
   'user.login'(email, password) {
     check([email, password], [String]);
 

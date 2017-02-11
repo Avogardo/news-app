@@ -36,7 +36,7 @@ class Users extends Component {
 
                 {!this.props.currentUser ||  this.props.currentUser._id !== this.props.params.userId?
                     <div>
-                        <h3>You have no permission.</h3>
+                        <Link to="/"><h3>Log in please</h3></Link>
                     </div> :
 
                     <div>
