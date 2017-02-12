@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
 import { createContainer } from 'meteor/react-meteor-data'
-
+import Login from './Login.jsx'
 
 class ThisUser extends Component {
 
@@ -23,25 +23,38 @@ class ThisUser extends Component {
         }
     }
 
+    renderProfile(ownerId) {
+        const id = ownerId;
+
+        if(typeof this.props.userList[0] !== 'undefined') {
+            let result = this.props.userList.filter(function( obj ) {
+                return obj._id == id;
+            });
+
+        return <ul>
+                <li>Name: {result[0].profile.name}</li>
+                <li>Flag: {result[0].profile.flag || 'Google user'}</li>
+                <li>Email: {this.showEmail(result[0])}</li>
+                {this.isVerified(result[0])}
+            </ul>
+        }
+    }
+
+    guest(ownerId) {
+        if(!this.props.currentUser || this.props.currentUser._id !== this.props.params.userId) {
+            return <div>
+                <h1><Link to="/">Lolnet</Link></h1>
+                <Login />
+            </div>
+        }
+        
+    }
+
     render() {
         return (
             <div>
-
-                {!this.props.currentUser ||  this.props.currentUser._id !== this.props.params.userId?
-                    <div>
-                        <h3>You have no permission.</h3>
-                    </div> :
-
-                    <div>
-                        <ul>
-                            <li>Name: {this.props.currentUser.profile.name}</li>
-                            <li>Flag: {this.props.currentUser.profile.flag || 'Google user'}</li>
-                            <li>Email: {this.showEmail(this.props.currentUser)}</li>
-                            {this.isVerified(this.props.currentUser)}
-                        </ul>
-                    </div>
-                }
-
+                {this.guest(this.props.params.userId)}
+                {this.renderProfile(this.props.params.userId)}                
             </div>
         );
     }
@@ -49,11 +62,13 @@ class ThisUser extends Component {
 
 ThisUser.propTypes = {
   currentUser: PropTypes.object,
+  userList: PropTypes.array.isRequired,
 };
 
 export default createContainer(() => {
   return {
     currentUser: Meteor.user(),
+    userList: Meteor.users.find({}).fetch(),
   };
 }, ThisUser);
 //<li>State: {(!this.props.currentUser.emails[0].verified? 'verified' : 'unverified') || 'nic'}</li>

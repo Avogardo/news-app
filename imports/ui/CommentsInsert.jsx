@@ -10,7 +10,6 @@ class CommentsInsert extends Component {
   constructor(props) {
       super(props);
       this.submitComment = this.submitComment.bind(this);
-      //this.loko = this.loko.bind(this);
       this.showcomments = this.showcomments.bind(this);
       this.clear = this.clear.bind(this);
   }
@@ -26,7 +25,11 @@ class CommentsInsert extends Component {
         return result.map((comment) => {
           return <li key={comment._id} id={comment._id}>
             <p><time>{moment(comment.createdAt).calendar()}</time></p>
-            <strong>{comment.owner}</strong>: <br /> <div ref={comment._id} dangerouslySetInnerHTML={this.innetText(comment.text)} />
+            <strong> {
+              !this.props.currentUser || comment.ownerId !== this.props.currentUser._id? <Link to={'/user/'+comment.ownerId}>{comment.owner}</Link> :
+              <Link to={'/users/main/'+comment.ownerId}>{comment.owner}</Link>
+            }</strong>
+            : <br /> <div ref={comment._id} dangerouslySetInnerHTML={this.innetText(comment.text)} />
             <br />
             {currentUserId === comment.ownerId || idAdmin === 'admin' ? (
               <div>

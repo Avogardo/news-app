@@ -74,6 +74,12 @@ Meteor.methods({
       }
   },
 
+  'user.updateFlag'(userId, userFlag) {
+    check([userId, userFlag], [String]);
+
+    Meteor.users.update(userId, { $set: { 'profile.flag': userFlag }});
+  },
+
   'user.updateName'(userId, userFlag, username) {
     check([userId, userFlag, username], [String]);
 
