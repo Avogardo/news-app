@@ -25,10 +25,7 @@ class CommentsInsert extends Component {
         return result.map((comment) => {
           return <li key={comment._id} id={comment._id}>
             <p><time>{moment(comment.createdAt).calendar()}</time></p>
-            <strong> {
-              !this.props.currentUser || comment.ownerId !== this.props.currentUser._id? <Link to={'/user/'+comment.ownerId}>{comment.owner}</Link> :
-              <Link to={'/users/main/'+comment.ownerId}>{comment.owner}</Link>
-            }</strong>
+            <strong>{this.renderNickName(comment.ownerId)}</strong>
             : <br /> <div ref={comment._id} dangerouslySetInnerHTML={this.innetText(comment.text)} />
             <br />
             {currentUserId === comment.ownerId || idAdmin === 'admin' ? (
@@ -41,10 +38,24 @@ class CommentsInsert extends Component {
                 </button>
               </div>
             ) : ''}
-            <br /><br />
+            <br />
           </li>
         });
       }
+  }
+
+  renderNickName(userId) {
+    if(typeof this.props.userList[0] !== 'undefined') {
+        let result = this.props.userList.filter(function( obj ) {
+            return obj._id === userId;
+        });
+
+      if(!this.props.currentUser || userId !== this.props.currentUser._id) {
+        return <Link to={'/user/'+userId}>{result[0].profile.name}</Link>
+      } else {
+        return <Link to={'/users/main/'+userId}>{result[0].profile.name}</Link>
+      }
+    }
   }
 
   editComment(e, comment) {
@@ -62,8 +73,8 @@ class CommentsInsert extends Component {
       input = input.replace(/&gt;/g, '>');
 
       input = input.replace(/\<br>/g, '\n');
-//new textarea
-    const sp1 = document.createElement("textarea");
+
+    const sp1 = document.createElement("textarea"); //new textarea
     sp1.ref = 'ta_'+comment._id;
     sp1.maxLength = '150';
     let sp1_content = document.createTextNode(input);
@@ -71,19 +82,19 @@ class CommentsInsert extends Component {
     const sp2 = ReactDOM.findDOMNode(this.refs[comment._id]);
     const parentDiv = sp2.parentNode;
     parentDiv.replaceChild(sp1, sp2);
-//new cancel
-    let cancel = document.createElement('button');
+
+    let cancel = document.createElement('button'); //new cancel
     cancel.id = 'remove_'+comment._id;
     const cancel_content = document.createTextNode('cancel');
     cancel.onclick = function() {
-//back to div
-      const parentOldDiv = sp1.parentNode;
+
+      const parentOldDiv = sp1.parentNode; //back to div
       parentOldDiv.replaceChild(sp2, sp1);
-//back to remove
-      const parentOldRemove = cancel.parentNode;
+
+      const parentOldRemove = cancel.parentNode; //back to remove
       parentOldRemove.replaceChild(remove, cancel);
-//back to edit
-      const parentOldEdit = update.parentNode;
+
+      const parentOldEdit = update.parentNode; //back to edit
       parentOldEdit.replaceChild(edit, update);
 
       return false;
@@ -92,19 +103,19 @@ class CommentsInsert extends Component {
     const remove = ReactDOM.findDOMNode(this.refs[cancel.id]);
     const parentRemove = remove.parentNode;
     parentRemove.replaceChild(cancel, remove);
-//new update
-    let update = document.createElement('button');
+
+    let update = document.createElement('button'); //new update
     update.id = 'edit_'+comment._id;
     const edit_content = document.createTextNode('update');
     update.onclick = function() {
       Meteor.call('comment.update', comment._id, sp1.value);
       const parentOldDiv = sp1.parentNode;
       parentOldDiv.replaceChild(sp2, sp1);
-//back to remove
-      const parentOldRemove = cancel.parentNode;
+
+      const parentOldRemove = cancel.parentNode; //back to remove
       parentOldRemove.replaceChild(remove, cancel);
-//back to edit
-      const parentOldEdit = update.parentNode;
+
+      const parentOldEdit = update.parentNode; //back to edit
       parentOldEdit.replaceChild(edit, update);
 
       return false;
@@ -178,6 +189,7 @@ class CommentsInsert extends Component {
 CommentsInsert.propTypes = {
   currentUser: PropTypes.object,
   comments: PropTypes.array.isRequired,
+  userList: PropTypes.array.isRequired,
 };
 
 
@@ -186,6 +198,7 @@ export default createContainer(() => {
   return {
     currentUser: Meteor.user(),
     comments: Comments.find({}).fetch(),
+    userList: Meteor.users.find({}).fetch(),
   };
 }, CommentsInsert);
 

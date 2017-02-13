@@ -31,18 +31,22 @@ class ThisNews extends Component {
         const currentUserId = this.props.currentUser && this.props.currentUser._id;
         const idAdmin = this.props.currentUser && this.props.currentUser.profile.flag;
 
-        return <article>
-            <h2 dangerouslySetInnerHTML={this.createDangerousCode(result[0].header)} />
-            <h3 dangerouslySetInnerHTML={this.createDangerousCode(result[0].intro)} />
-            <p dangerouslySetInnerHTML={this.createDangerousCode(result[0].text)} />
+        return <div>
+          <article>
+              <h2 dangerouslySetInnerHTML={this.createDangerousCode(result[0].header)} />
+              <h3 dangerouslySetInnerHTML={this.createDangerousCode(result[0].intro)} />
+              <p dangerouslySetInnerHTML={this.createDangerousCode(result[0].text)} />
 
-            {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? (
-              <button onClick={() => Meteor.call('news.remove', this.state.linkid)}>
-                remove
-              </button>
-            ) : ''}
-
-        </article>
+              {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? (
+                <button onClick={() => Meteor.call('news.remove', this.state.linkid)}>
+                  remove
+                </button>
+              ) : ''}
+          </article> <br /><br />
+          <CommentsInsert
+            newsId={this.state.linkid}
+          />
+        </div>
       } else {
         return <p>This news has been removed.</p>
       }
@@ -57,11 +61,6 @@ createDangerousCode(text) {
     return (
       <div>
         {this.renderNews(this.state.linkid)}
-
-        <br /><br />
-        <CommentsInsert
-        	newsId={this.state.linkid}
-        />
       </div>
     );
   }
@@ -71,8 +70,6 @@ ThisNews.propTypes = {
   currentUser: PropTypes.object,
   news: PropTypes.array.isRequired,
 };
-
-
 
 export default createContainer(() => {
   return {

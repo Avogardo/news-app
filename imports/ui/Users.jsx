@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
 import { createContainer } from 'meteor/react-meteor-data'
+import Login from './Login.jsx';
 
 class Users extends Component {
 
@@ -35,13 +36,14 @@ class Users extends Component {
         return (
             <div>
             <h1><Link to="/">Lolnet</Link></h1>
-
+            <Login />
                 {!this.props.currentUser ||  this.props.currentUser._id !== this.props.params.userId?
                     <div>
                         <Link to="/"><h3>Log in please</h3></Link>
                     </div> :
 
                     <div>
+
                     	<h2>Hi {this.props.currentUser.profile.flag  || 'user'} {this.props.currentUser.profile.name}!</h2>
 						  
 						{this.isGoogleUser(this.props.currentUser)}

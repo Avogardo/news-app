@@ -71,4 +71,3 @@ export default createContainer(() => {
     userList: Meteor.users.find({}).fetch(),
   };
 }, ThisUser);
-//<li>State: {(!this.props.currentUser.emails[0].verified? 'verified' : 'unverified') || 'nic'}</li>
