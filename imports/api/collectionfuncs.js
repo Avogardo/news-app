@@ -150,7 +150,7 @@ Meteor.methods({
         header,
         intro,
         text,
-        owner: Meteor.users.findOne(this.userId).username || Meteor.users.findOne(this.userId).profile.name,
+        ownerID: Meteor.userId(),
         createdAt: new Date(),
       });
     }
@@ -177,7 +177,7 @@ Meteor.methods({
   'comments.insert'(newsId, text) {
     check([newsId, text], [String]);
 
-    if( text.length <= 150) {
+    if( text.length <= 500) {
       let input = text;
       input = input.replace(/</g, '&lt;');
       input = input.replace(/>/g, '&gt;');
@@ -210,7 +210,7 @@ Meteor.methods({
     check(commentId, String);
     check(newtext, String);
 
-    if( newtext.length <= 150) {
+    if( newtext.length <= 500) {
       let input = newtext;
       input = input.replace(/</g, '&lt;');
       input = input.replace(/>/g, '&gt;');

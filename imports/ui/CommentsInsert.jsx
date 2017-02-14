@@ -9,6 +9,10 @@ class CommentsInsert extends Component {
 
   constructor(props) {
       super(props);
+      this.state = ({
+        counter: 500
+      });
+
       this.submitComment = this.submitComment.bind(this);
       this.showcomments = this.showcomments.bind(this);
       this.clear = this.clear.bind(this);
@@ -76,7 +80,7 @@ class CommentsInsert extends Component {
 
     const sp1 = document.createElement("textarea"); //new textarea
     sp1.ref = 'ta_'+comment._id;
-    sp1.maxLength = '150';
+    sp1.maxLength = '500';
     let sp1_content = document.createTextNode(input);
     sp1.appendChild(sp1_content);
     const sp2 = ReactDOM.findDOMNode(this.refs[comment._id]);
@@ -135,6 +139,9 @@ class CommentsInsert extends Component {
     const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
     const newsId = this.props.newsId;
 
+    this.setState({
+      counter: 500
+    });
 
     Meteor.call('comments.insert', newsId, text);
     ReactDOM.findDOMNode(this.refs.textInput).value = '';
@@ -152,6 +159,12 @@ class CommentsInsert extends Component {
       console.log(this.props.comments);
   }
 
+  counterUpdate(e) {
+    this.setState({
+      counter: 500 - e.target.value.length
+    });
+  }
+
   render() {
 
     return (
@@ -161,19 +174,20 @@ class CommentsInsert extends Component {
         <div><ul>{this.renderComments(this.props.newsId)}</ul></div>
 
         { this.props.currentUser ?
-          <form onSubmit={this.submitComment}>
+          <form onSubmit={this.submitComment} >
 
-          	<textarea
+          	<textarea onChange={(e) => this.counterUpdate(e)}
           	rows="4"
           	cols="40"
           	ref="textInput"
-          	placeholder="Write some comment [150]"
-          	maxLength="150"
+          	placeholder="Write some comment [500]"
+          	maxLength="500"
           	wrap="hard"
           	required
           	/>
 
             <input type="submit" value="Submit comment" />
+            <div>{this.state.counter}</div>
           </form> : ''
         }
 

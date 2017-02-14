@@ -40,8 +40,6 @@ class App extends Component {
 
     console.log(this.props.news);
     console.log('Length: ' + News.find().count());
-    console.log(this.props.currentUser._id);
-    console.log(this.props.userList[0].profile.name);
   }
 
   renderNews() {
