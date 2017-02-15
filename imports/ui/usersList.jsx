@@ -21,6 +21,7 @@ class usersList extends Component {
                     <option value="redactor">Redactor</option>
                 </select> : <p>Google user</p>
                 }
+            <button onClick={() => Meteor.call('user.remove', user._id)}>Remove</button>
           </li>
         });
       }

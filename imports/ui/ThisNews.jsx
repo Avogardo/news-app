@@ -17,7 +17,8 @@ class ThisNews extends Component {
 
   componentWillMount() {
     this.setState({
-      linkid: this.props.params.newsId
+      linkid: this.props.params.newsId,
+      isError: false,
     });
   }
 
@@ -39,7 +40,7 @@ class ThisNews extends Component {
               <p dangerouslySetInnerHTML={this.createDangerousCode(result[0].text)} />
 
               <author>Redactor {this.renderAuthorName(result[0].ownerID)}</author> <br />
-              <button onClick={(e) => this.spotMistake(e, ownerId)}>
+              <button ref="spotButton" onClick={(e) => this.spotMistake(e, ownerId, result[0]._id)}>
                 Send info about mistakes
               </button>
               {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? (
@@ -61,16 +62,69 @@ class ThisNews extends Component {
     return {__html: text};
   }
 
-  spotMistake(e, authorId) {
+  spotMistake(e, authorId, newsId) {
     e.preventDefault();
 
-    console.log(authorId);
+    const form = document.createElement("form"); //new form
+      const textarea = document.createElement("textarea"); //new textarea   
+      textarea.placeholder = 'Tell us what`s wrong';
+      textarea.required = true;
+      form.appendChild(textarea);
+
+      let send = document.createElement('button'); //new button
+        const send_content = document.createTextNode('Send');
+        send.onclick = () => {
+          if(textarea.value) {
+            Meteor.call('user.addMessage', authorId, textarea.value, newsId);
+
+            const submitted = document.createElement("p"); //new paragraph
+            const submitted_content = document.createTextNode('Thanx for report');
+            submitted.appendChild(submitted_content);
+
+            parentDiv.replaceChild(submitted, form);
+          } else {
+            if(!this.state.isError) {
+              const error = document.createElement("span"); //new paragraph
+              const error_content = document.createTextNode('Field is empty');
+              error.appendChild(error_content);
+              form.appendChild(error);
+
+              this.setState({
+                isError: true
+              });
+            }
+          }
+          return false;
+        };
+        send.appendChild(send_content);
+        form.appendChild(send);
+      let cancel = document.createElement('button'); //new button
+        const cancel_content = document.createTextNode('Cancel');
+        cancel.onclick = () => {
+          this.setState({
+            isError: false
+          });
+          parentDiv.replaceChild(oldButton, form);
+          return false;
+        };
+        cancel.appendChild(cancel_content);
+        form.appendChild(cancel);
+
+
+    const oldButton = ReactDOM.findDOMNode(this.refs.spotButton);
+    const parentDiv = oldButton.parentNode;
+    parentDiv.replaceChild(form, oldButton);
   }
 
   renderAuthorName(authorId) {
     if(typeof this.props.userList[0] !== 'undefined') {
       const author = this.props.userList.find((obj) => obj._id === authorId);
-      return author.profile.name
+      if(author) {
+        return author.profile.name
+      } else {
+        return <span>is no more</span>
+      }
+
     }
   }
 

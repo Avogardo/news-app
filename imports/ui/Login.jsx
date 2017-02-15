@@ -72,7 +72,10 @@ class Login extends Component {
             <Link to="/signup">sign</Link>
           </div> :
           <div>
-            <p>Wellcome <b><Link to={'/users/main/'+this.props.currentUser._id}>{this.props.currentUser.profile.name}</Link></b></p>
+            <p>Wellcome 
+              <b><Link to={'/users/main/'+this.props.currentUser._id}> {this.props.currentUser.profile.name}</Link></b>
+              {this.props.currentUser.message? <span> {this.props.currentUser.message.length}</span> : ''}
+            </p>
             <form onSubmit={this.logOut}>
               <input type="submit" value="Log out" />
             </form>

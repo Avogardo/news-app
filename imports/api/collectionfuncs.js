@@ -53,6 +53,7 @@ Meteor.methods({
         name: username,
         flag: 'admin',
       }
+
     });
   },
 
@@ -126,6 +127,33 @@ Meteor.methods({
     Accounts.setPassword(userId, newPassword)
   },
 
+  'user.addMessage'(userId, text, newsId) {
+    check([userId, text, newsId], [String]);
+
+    if(text.length) {
+      Meteor.users.update(userId, { 
+        $push: { 
+          message: {
+            content: text,
+            newsId: newsId,
+          }
+        } 
+      });
+    }
+  },
+
+  'user.removeMessage'(userId, newsId) {
+    check([userId, newsId], [String]);
+
+    Meteor.users.update(userId, { 
+      $pull: { 
+        message: {
+          newsId: newsId,
+        }
+      } 
+    });
+  },
+
   'user.login'(email, password) {
     check([email, password], [String]);
 
@@ -133,6 +161,8 @@ Meteor.methods({
   },
 
   'user.remove'(id) {
+    check(id, String);
+
     Meteor.users.remove({
      _id: id
     })
