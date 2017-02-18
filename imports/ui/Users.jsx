@@ -22,8 +22,10 @@ class Users extends Component {
 						  		<li><Link to={'/users/change-email/'+this.props.currentUser._id}>Change email</Link></li>
 						  		<li><Link to={'/users/change-password/'+this.props.currentUser._id}>Change password</Link></li>
 						  	</ul>
+                        {(user.profile.flag === 'admin' || 'redactor')? 
+                            <li><Link to={'/users/messages/'+this.props.currentUser._id}>Messages</Link></li> : ''}
                         {(user.profile.flag === 'admin')? 
-                        <li><Link to={'/users/admin-panel/'+this.props.currentUser._id}>Users</Link></li> : ''}
+                            <li><Link to={'/users/admin-panel/'+this.props.currentUser._id}>Users</Link></li> : ''}
 					</ul>
     	} else {
     		return <ul>

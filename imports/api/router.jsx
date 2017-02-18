@@ -12,6 +12,7 @@ import Changeemail from '../ui/Changeemail.jsx'
 import Changepassword from '../ui/Changepassword.jsx'
 import NewsInserter from '../ui/NewsInserter.jsx'
 import usersList from '../ui/usersList.jsx'
+import Messages from '../ui/Messages.jsx'
 
 export const renderRoutes = () => (
     <Router history={browserHistory}>
@@ -26,6 +27,7 @@ export const renderRoutes = () => (
             <Route path="/users/change-email/(:userId)" component={Changeemail}/>
             <Route path="/users/change-password/(:userId)" component={Changepassword}/>
             <Route path="/users/admin-panel/(:userId)" component={usersList}/>
+            <Route path="/users/messages/(:userId)" component={Messages}/>
         </Route>
         <Route path="/user/(:userId)" component={ThisUser}/>
         <Route path="/compose" component={NewsInserter}/>
