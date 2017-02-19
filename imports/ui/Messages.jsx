@@ -9,17 +9,20 @@ class Messages extends Component {
     renderMessages(user, news) {
 
         if(user.message && news[0].text) {
-            return user.message.map((message) => {
+            return user.message.map((message, index) => {
                 const thisNews = news.find((obj) => obj._id === message.newsId);
                 if(thisNews) {
-                    return <ul key={thisNews._id}>
+                    return <ul key={index}>
                         <li>
                             <h4><Link to={'/news/' + thisNews._id}>{thisNews.header}</Link></h4>
                             <p>{message.content}</p>
+                            <button onClick={() => Meteor.call('user.removeMessage', user._id, message.content, message.newsId)}>
+                                Remove
+                            </button>
                         </li>
                     </ul>
                 } else {
-                    console.log(message.newsId);
+                    Meteor.call('user.removeMessage', user._id, message.content, message.newsId);
                 }
             });
         }

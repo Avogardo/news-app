@@ -35,19 +35,22 @@ class ThisNews extends Component {
 
         return <div>
           <article>
-              <h2 dangerouslySetInnerHTML={this.createDangerousCode(result[0].header)} />
-              <h3 dangerouslySetInnerHTML={this.createDangerousCode(result[0].intro)} />
-              <p dangerouslySetInnerHTML={this.createDangerousCode(result[0].text)} />
+              <h2 ref="header" dangerouslySetInnerHTML={this.createDangerousCode(result[0].header)} />
+              <h3 ref="intro" dangerouslySetInnerHTML={this.createDangerousCode(result[0].intro)} />
+              <p ref="text" dangerouslySetInnerHTML={this.createDangerousCode(result[0].text)} />
 
               <author>Redactor {this.renderAuthorName(result[0].ownerID)}</author> <br />
               <button ref="spotButton" onClick={(e) => this.spotMistake(e, ownerId, result[0]._id)}>
                 Send info about mistakes
               </button>
-              {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? (
+              {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? ( <div>
                 <button onClick={() => Meteor.call('news.remove', this.state.linkid)}>
                   remove
                 </button>
-              ) : ''} 
+                <button ref="edit" onClick={(e) => this.updateNews(e, result[0])}>
+                  edit
+                </button>
+              </div>) : ''} 
           </article> <br /><br />
           <CommentsInsert
             newsId={this.state.linkid}
@@ -60,6 +63,51 @@ class ThisNews extends Component {
 
   createDangerousCode(text) {
     return {__html: text};
+  }
+
+  updateNews(e, news) {
+    e.preventDefault();
+
+    const header = ReactDOM.findDOMNode(this.refs.header),
+          text = ReactDOM.findDOMNode(this.refs.text),
+          edit = ReactDOM.findDOMNode(this.refs.edit);
+
+    const headerArea = this.elementCreate('textarea', news.header),
+          textArea = this.elementCreate('textarea', news.text);
+
+    this.childReplace(headerArea, header);
+    this.childReplace(textArea, text);
+
+    if(news.intro) {
+      var intro = ReactDOM.findDOMNode(this.refs.intro),
+          introArea = this.elementCreate('textarea', news.intro);
+      this.childReplace(introArea, intro);
+    }
+
+    const cancel = this.elementCreate('button', 'Cancel');
+    cancel.onclick = () => {
+      this.childReplace(header, headerArea);
+      this.childReplace(text, textArea);
+      this.childReplace(edit, cancel);
+      if(news.intro) {
+        this.childReplace(intro, introArea);
+      }
+    }
+    this.childReplace(cancel, edit);
+  }
+
+  elementCreate(element, text) {
+    const newElement = document.createElement(element);
+    newElement.required = true;
+    const content = document.createTextNode(text);
+    newElement.appendChild(content);
+
+    return newElement;
+  }
+
+  childReplace(newbject, oldbject) {
+    const parent = oldbject.parentNode;
+    parent.replaceChild(newbject, oldbject);
   }
 
   spotMistake(e, authorId, newsId) {

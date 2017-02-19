@@ -142,12 +142,13 @@ Meteor.methods({
     }
   },
 
-  'user.removeMessage'(userId, newsId) {
-    check([userId, newsId], [String]);
+  'user.removeMessage'(userId, content, newsId) {
+    check([userId, content, newsId], [String]);
 
     Meteor.users.update(userId, { 
       $pull: { 
         message: {
+          content: content,
           newsId: newsId,
         }
       } 
