@@ -198,11 +198,23 @@ Meteor.methods({
     News.remove({});
   },
 
-  'news.update'(newsId, newtext) {
-    check(newsId, String);
-    check(newtext, String);
+  'news.updateWithIntro'(newsId, newHeader, newIntro, newtext) {
+    check([newsId, newHeader, newIntro, newtext], [String]);
 
-    News.update(newsId, { $set: { text: newtext } });
+    News.update(newsId, { $set: { 
+      header: newHeader,
+      intro: newIntro,
+      text: newtext } 
+    });
+  },
+
+  'news.updateWithoutIntro'(newsId, newHeader, newtext) {
+    check([newsId, newHeader, newtext], [String]);
+
+    News.update(newsId, { $set: { 
+      header: newHeader,
+      text: newtext } 
+    });
   },
 
   'comments.insert'(newsId, text) {

@@ -32,7 +32,7 @@ class ThisNews extends Component {
         const currentUserId = this.props.currentUser && this.props.currentUser._id;
         const idAdmin = this.props.currentUser && this.props.currentUser.profile.flag;
         const ownerId = result[0].ownerID;
-
+        
         return <div>
           <article>
               <h2 ref="header" dangerouslySetInnerHTML={this.createDangerousCode(result[0].header)} />
@@ -43,7 +43,7 @@ class ThisNews extends Component {
               <button ref="spotButton" onClick={(e) => this.spotMistake(e, ownerId, result[0]._id)}>
                 Send info about mistakes
               </button>
-              {currentUserId ===  this.props.news.ownerId || idAdmin === 'admin' ? ( <div>
+              {currentUserId ===  ownerId || idAdmin === 'admin' ? ( <div>
                 <button onClick={() => Meteor.call('news.remove', this.state.linkid)}>
                   remove
                 </button>
@@ -70,7 +70,8 @@ class ThisNews extends Component {
 
     const header = ReactDOM.findDOMNode(this.refs.header),
           text = ReactDOM.findDOMNode(this.refs.text),
-          edit = ReactDOM.findDOMNode(this.refs.edit);
+          edit = ReactDOM.findDOMNode(this.refs.edit),
+          spotButton = ReactDOM.findDOMNode(this.refs.spotButton);
 
     const headerArea = this.elementCreate('textarea', news.header),
           textArea = this.elementCreate('textarea', news.text);
@@ -89,11 +90,27 @@ class ThisNews extends Component {
       this.childReplace(header, headerArea);
       this.childReplace(text, textArea);
       this.childReplace(edit, cancel);
+      this.childReplace(spotButton, update);
       if(news.intro) {
         this.childReplace(intro, introArea);
       }
     }
     this.childReplace(cancel, edit);
+
+    const update = this.elementCreate('button', 'Update');
+    update.onclick = () => {
+      if(news.intro) {
+        Meteor.call('news.updateWithIntro', news._id, headerArea.value, introArea.value, textArea.value);
+        this.childReplace(intro, introArea);
+      } else {
+        Meteor.call('news.updateWithoutIntro', news._id, headerArea.value, textArea.value);
+      }
+      this.childReplace(header, headerArea);
+      this.childReplace(text, textArea);
+      this.childReplace(edit, cancel);
+      this.childReplace(spotButton, update);
+    }
+    this.childReplace(update, spotButton);
   }
 
   elementCreate(element, text) {
