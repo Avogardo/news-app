@@ -13,6 +13,7 @@ import Changepassword from '../ui/Changepassword.jsx'
 import NewsInserter from '../ui/NewsInserter.jsx'
 import usersList from '../ui/usersList.jsx'
 import Messages from '../ui/Messages.jsx'
+import VerifyEmail from '../ui/VerifyEmail.jsx'
 
 export const renderRoutes = () => (
     <Router history={browserHistory}>
@@ -31,5 +32,6 @@ export const renderRoutes = () => (
         </Route>
         <Route path="/user/(:userId)" component={ThisUser}/>
         <Route path="/compose" component={NewsInserter}/>
+        <Route path="/verify-email/(:token)" component={VerifyEmail}/>
     </Router>
 );

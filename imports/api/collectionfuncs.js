@@ -35,12 +35,14 @@ Meteor.methods({
       to: to,
       from: from,
       subject: subject,
-      text: text
+      text: text,
     });
   },
 
   sendVerificationLink() {
-//
+    const user = Meteor.users.find({}).fetch().length - 1;
+
+    Accounts.sendVerificationEmail(Meteor.users.find({}).fetch()[user]._id);
   },
 
   'admin.insert'(email, username, password) {
@@ -85,11 +87,11 @@ Meteor.methods({
     check([userId, userFlag, username], [String]);
 
     if( username !== Meteor.user().profile.name ) {
-      Meteor.users.update(userId, { 
+      Meteor.users.update(userId, {
         $set: { profile: {
           flag: userFlag,
           name: username }
-        } 
+        }
       });
     } else {
       console.log('error');
@@ -131,13 +133,13 @@ Meteor.methods({
     check([userId, text, newsId], [String]);
 
     if(text.length) {
-      Meteor.users.update(userId, { 
-        $push: { 
+      Meteor.users.update(userId, {
+        $push: {
           message: {
             content: text,
             newsId: newsId,
           }
-        } 
+        }
       });
     }
   },
@@ -145,13 +147,13 @@ Meteor.methods({
   'user.removeMessage'(userId, content, newsId) {
     check([userId, content, newsId], [String]);
 
-    Meteor.users.update(userId, { 
-      $pull: { 
+    Meteor.users.update(userId, {
+      $pull: {
         message: {
           content: content,
           newsId: newsId,
         }
-      } 
+      }
     });
   },
 
@@ -201,19 +203,19 @@ Meteor.methods({
   'news.updateWithIntro'(newsId, newHeader, newIntro, newtext) {
     check([newsId, newHeader, newIntro, newtext], [String]);
 
-    News.update(newsId, { $set: { 
+    News.update(newsId, { $set: {
       header: newHeader,
       intro: newIntro,
-      text: newtext } 
+      text: newtext }
     });
   },
 
   'news.updateWithoutIntro'(newsId, newHeader, newtext) {
     check([newsId, newHeader, newtext], [String]);
 
-    News.update(newsId, { $set: { 
+    News.update(newsId, { $set: {
       header: newHeader,
-      text: newtext } 
+      text: newtext }
     });
   },
 

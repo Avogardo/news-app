@@ -61,9 +61,9 @@ class App extends Component {
 
     Meteor.call('sendEmail',
             'avogardo0@gmail.com',
-            'michal@michalzone.com',
-            'Na pewno nie Michał, gra planszowa',
-            'Jak tam giera hehe LOL kek juh juh naoah tra ta ta');
+            'test@korniszon.com',
+            'temat',
+            'treść');
   }
 
   isRedactor() {
@@ -104,7 +104,7 @@ class App extends Component {
         <p>Test buttons</p>
         <form onSubmit={this.clear}><input type="submit" value="Clear news" /></form>
         <form onSubmit={this.showcollection}><input type="submit" value="Show collection" /></form>
-        <form onSubmit={this.sendEmail}><input type="submit" value="Send email (disable)" disabled /></form>
+        <form onSubmit={this.sendEmail}><input type="submit" value="Send email" /></form>
       </div>
     );
   }

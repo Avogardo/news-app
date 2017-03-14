@@ -17,6 +17,7 @@ class SignUp extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.showcollection = this.showcollection.bind(this);
         this.clear = this.clear.bind(this);
+        this.sendveryfication = this.sendveryfication.bind(this);
     }
 
   handleSubmit(e) {
@@ -26,14 +27,32 @@ class SignUp extends Component {
     const email = ReactDOM.findDOMNode(this.refs.emailInput).value.trim();
     const password = ReactDOM.findDOMNode(this.refs.passwordInput).value.trim();
 
-    Meteor.call('user.insert', email, username, password);
+    Meteor.call('user.insert', email, username, password, ( error, response ) => {
+      if ( error ) {
+        console.log(error);
+      } else {
+        Meteor.call( 'sendVerificationLink', ( error, response ) => {
+          if ( error ) {
+            console.log(error.reason);
+          } else {
+            console.log('veryfication link has been send');
+          }
+        });
+      }
+    });
+
     ReactDOM.findDOMNode(this.refs.usernameInput).value = '';
     ReactDOM.findDOMNode(this.refs.emailInput).value = '';
     ReactDOM.findDOMNode(this.refs.passwordInput).value = '';
 
-      this.setState({
-        wasCreated: true
-      });
+    this.setState({
+      wasCreated: true
+    });
+  }
+
+  sendveryfication(e) {
+    e.preventDefault();
+    Meteor.call( 'sendVerificationLink');
   }
 
   clear(e) {
@@ -42,11 +61,11 @@ class SignUp extends Component {
         Meteor.call('user.allremove');
   }
 
-    showcollection(e) {
-        e.preventDefault();
+  showcollection(e) {
+      e.preventDefault();
 
-        console.log(this.props.userList);
-    }
+      console.log(this.props.userList);
+  }
 
   render() {
 
@@ -91,6 +110,7 @@ class SignUp extends Component {
         <p>Test buttons</p>
         <form onSubmit={this.clear}><input type="submit" value="Remove user" /></form>
         <form onSubmit={this.showcollection}><input type="submit" value="Show collection" /></form>
+        <form onSubmit={this.sendveryfication}><input type="submit" value="sendveryfication" /></form>
       </div>
     );
   }
