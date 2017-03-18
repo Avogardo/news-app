@@ -2,6 +2,7 @@ import React, { Component, PropTypes  } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
 import { News, Comments } from '../api/collectionfuncs.js';
+import { Button } from 'semantic-ui-react'
 
 class NewsContainer extends Component {
 
@@ -50,9 +51,12 @@ createNews(news) {
 
 
             {currentUserId ===  (this.props.news.ownerId && idRedactor === 'redactor') || idAdmin === 'admin' ? (
-              <button onClick={() => Meteor.call('news.remove', this.props.news._id)}>
-                remove
-              </button>
+              <Button
+                negative
+                onClick={() => Meteor.call('news.remove', this.props.news._id)}
+              >
+                Remove
+              </Button>
             ) : ''}
         </article>
     )

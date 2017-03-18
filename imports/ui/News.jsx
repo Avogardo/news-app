@@ -8,7 +8,6 @@ export default class News extends Component {
   render() {
     return (
       <div id="news">
-        <h1><Link to="/">Lolnet</Link></h1>
 
         <Login />
 

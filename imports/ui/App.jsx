@@ -7,6 +7,7 @@ import { Email } from 'meteor/email';
 import { News } from '../api/collectionfuncs.js';
 import NewsContainer from './NewsContainer.jsx';
 import Login from './Login.jsx';
+import { Container } from 'semantic-ui-react'
 
 class App extends Component {
 
@@ -46,7 +47,6 @@ class App extends Component {
     let news = this.props.news;
 
     return news.map((news) => {
-
       return (
         <NewsContainer
           key={news._id}
@@ -66,21 +66,6 @@ class App extends Component {
             'treść');
   }
 
-  isRedactor() {
-    if(this.props.currentUser) {
-
-      if(this.props.currentUser.profile.flag === 'admin' || this.props.currentUser.profile.flag === 'redactor') {
-        return <button onClick={() => browserHistory.push('/compose')}>
-          Redactor panel
-        </button>
-      } else {
-        return ''
-      }
-    } else {
-      return ''
-    }
-  }
-
   render() {
 
     if(!this.props.currentUser) {
@@ -89,16 +74,14 @@ class App extends Component {
 
     return (
       <div>
-        <h1>Lolnet</h1>
 
         <Login />
 
-        {this.isRedactor()}
-
+  <Container text>
         <ul>
           {this.renderNews()}
         </ul>
-
+  </Container>
 
         <br /><br />
         <p>Test buttons</p>

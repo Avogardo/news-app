@@ -19,6 +19,14 @@
 	margin-bottom: 5px;
 }
 
+#logo {
+    color: #ffffff;
+}
+
+#logo:hover {
+    color: #c9c9c9;
+}
+
 a {
 	color: blue;
 	text-decoration: none;
@@ -26,4 +34,8 @@ a {
 
 a:hover {
 	color: #0795D9;
+}
+
+input[type=email], input[type=password] {
+    color: red;
 }
