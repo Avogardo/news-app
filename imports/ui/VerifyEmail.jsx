@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
 import { Accounts } from 'meteor/accounts-base'
+import Login from './Login.jsx';
 
 export default class SignUp extends Component {
 
@@ -17,7 +18,10 @@ export default class SignUp extends Component {
   render() {
     this.veryfi(this.props.params.token);
     return (
-      <span>Your account has been verified</span>
+      <div>
+        <Login />
+        <span>Your account has been verified</span>
+      </div>
     );
   }
 }

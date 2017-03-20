@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router'
 import { Accounts } from 'meteor/accounts-base'
 import { createContainer } from 'meteor/react-meteor-data'
+import { Header, Segment, Menu, Button, Icon, Input } from 'semantic-ui-react'
 
 class Login extends Component {
 
@@ -23,30 +24,6 @@ class Login extends Component {
     });
   }
 
-    logIn() {
-    if(!this.props.currentUser) {
-      return  <form onSubmit={this.logInFun}>
-      <h3>Log in</h3>
-        <input
-          type="text"
-          ref="emailInput"
-          placeholder="email"
-          required
-        /> <br />
-        <input
-          type="password"
-          ref="passwordInput"
-          placeholder="password"
-          required
-        /> <br />
-
-        <input type="submit" value="Log in" />
-      </form>
-    } else {
-      return ''
-    }
-  }
-
   logInFun(e) {
     e.preventDefault();
 
@@ -58,41 +35,96 @@ class Login extends Component {
     ReactDOM.findDOMNode(this.refs.passwordInput).value = '';
   }
 
-    logOut(e) {
+  logOut(e) {
     e.preventDefault();
     Meteor.logout();
+  }
+
+  isRedactor() {
+    if(this.props.currentUser) {
+
+      if(this.props.currentUser.profile.flag === 'admin' || this.props.currentUser.profile.flag === 'redactor') {
+        return <Menu.Item>
+          <Button
+            onClick={() => browserHistory.push('/compose')}
+          >
+            Redactor panel
+          </Button>
+        </Menu.Item>
+      } else {
+        return ''
+      }
+    } else {
+      return ''
+    }
   }
 
   render() {
     return (
       <div>
+      <Segment inverted color='violet'><Header as='h1'><Link id="logo" to="/">Fakty</Link></Header></Segment>
         {!this.props.currentUser ?
-          <div>
-            <h3>Sign up</h3>
-            <Link to="/signup">sign</Link>
-          </div> :
-          <div>
-            <p>Wellcome 
-              <b><Link to={'/users/main/'+this.props.currentUser._id}> {this.props.currentUser.profile.name}</Link></b>
-              {this.props.currentUser.message? <span> {this.props.currentUser.message.length}</span> : ''}
-            </p>
-            <form onSubmit={this.logOut}>
-              <input type="submit" value="Log out" />
-            </form>
-          </div>
-        }
 
-        {this.logIn()}
+      <Menu>
+        <Menu.Item>
+          <Button
+            primary
+            onClick={() => browserHistory.push('/signup')}
+          >
+            Sign up
+          </Button>
+        </Menu.Item>
 
-        <div>
-          {!this.props.currentUser ?
-            <form onSubmit={this.logInGoogle}>
-              <h3>Log in with google</h3>
-              <input type="submit" value="Log in with google" />
+        <Menu.Item>
+          <Button
+            color='google plus'
+            onClick={this.logInGoogle}
+          >
+            <Icon name='google plus' /> Google Plus
+          </Button>
+        </Menu.Item>
+
+          <Menu.Item position='right'>
+            <form onSubmit={this.logInFun}>
+              <input
+                type="text"
+                ref="emailInput"
+                placeholder="email"
+                required
+              />
+              <input
+                type="password"
+                ref="passwordInput"
+                placeholder="password"
+                required
+              />
+              <Button
+                content='Log in'
+                type="submit"
+              />
             </form>
-            : ''
-          }
-        </div>
+          </Menu.Item>
+      </Menu>
+           :
+      <Menu>
+        <Menu.Item>
+          <Header size='large'>Wellcome <b><Link to={'/users/main/'+this.props.currentUser._id}> {this.props.currentUser.profile.name}</Link></b>
+              {this.props.currentUser.message? <span> {this.props.currentUser.message.length}</span> : ''}</Header>
+        </Menu.Item>
+
+        {this.isRedactor()}
+
+        <Menu.Item position='right'>
+        <Button
+          primary
+          onClick={this.logOut}
+        >
+          Log out
+        </Button>
+        </Menu.Item>
+      </Menu>
+      }
+
       </div>
     );
   }

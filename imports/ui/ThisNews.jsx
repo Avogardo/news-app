@@ -5,6 +5,7 @@ import { Accounts } from 'meteor/accounts-base'
 import { createContainer } from 'meteor/react-meteor-data'
 import { News } from '../api/collectionfuncs.js';
 import CommentsInsert from './CommentsInsert.jsx';
+import { Container } from 'semantic-ui-react'
 
 class ThisNews extends Component {
 
@@ -32,30 +33,27 @@ class ThisNews extends Component {
         const currentUserId = this.props.currentUser && this.props.currentUser._id;
         const idAdmin = this.props.currentUser && this.props.currentUser.profile.flag;
         const ownerId = result[0].ownerID;
-        
-        return <div>
+
+        return <Container text>
           <article>
               <h2 ref="header" dangerouslySetInnerHTML={this.createDangerousCode(result[0].header)} />
               <h3 ref="intro" dangerouslySetInnerHTML={this.createDangerousCode(result[0].intro)} />
               <p ref="text" dangerouslySetInnerHTML={this.createDangerousCode(result[0].text)} />
 
-              <author>Redactor {this.renderAuthorName(result[0].ownerID)}</author> <br />
-              <button ref="spotButton" onClick={(e) => this.spotMistake(e, ownerId, result[0]._id)}>
-                Send info about mistakes
-              </button>
+              <author>Redactor {this.renderAuthorName(result[0].ownerID, result[0]._id)}</author> <br />
               {currentUserId ===  ownerId || idAdmin === 'admin' ? ( <div>
-                <button onClick={() => Meteor.call('news.remove', this.state.linkid)}>
+                <button ref="remove" onClick={() => Meteor.call('news.remove', this.state.linkid)}>
                   remove
                 </button>
                 <button ref="edit" onClick={(e) => this.updateNews(e, result[0])}>
                   edit
                 </button>
-              </div>) : ''} 
+              </div>) : ''}
           </article> <br /><br />
           <CommentsInsert
             newsId={this.state.linkid}
           />
-        </div>
+        </Container>
       } else {
         return <p>This news has been removed.</p>
       }
@@ -71,7 +69,7 @@ class ThisNews extends Component {
     const header = ReactDOM.findDOMNode(this.refs.header),
           text = ReactDOM.findDOMNode(this.refs.text),
           edit = ReactDOM.findDOMNode(this.refs.edit),
-          spotButton = ReactDOM.findDOMNode(this.refs.spotButton);
+          remove = ReactDOM.findDOMNode(this.refs.remove);
 
     const headerArea = this.elementCreate('textarea', news.header),
           textArea = this.elementCreate('textarea', news.text);
@@ -90,7 +88,7 @@ class ThisNews extends Component {
       this.childReplace(header, headerArea);
       this.childReplace(text, textArea);
       this.childReplace(edit, cancel);
-      this.childReplace(spotButton, update);
+      this.childReplace(remove, update);
       if(news.intro) {
         this.childReplace(intro, introArea);
       }
@@ -108,9 +106,9 @@ class ThisNews extends Component {
       this.childReplace(header, headerArea);
       this.childReplace(text, textArea);
       this.childReplace(edit, cancel);
-      this.childReplace(spotButton, update);
+      this.childReplace(remove, update);
     }
-    this.childReplace(update, spotButton);
+    this.childReplace(update, remove);
   }
 
   elementCreate(element, text) {
@@ -131,7 +129,7 @@ class ThisNews extends Component {
     e.preventDefault();
 
     const form = document.createElement("form"); //new form
-      const textarea = document.createElement("textarea"); //new textarea   
+      const textarea = document.createElement("textarea"); //new textarea
       textarea.placeholder = 'Tell us what`s wrong';
       textarea.required = true;
       form.appendChild(textarea);
@@ -181,15 +179,17 @@ class ThisNews extends Component {
     parentDiv.replaceChild(form, oldButton);
   }
 
-  renderAuthorName(authorId) {
+  renderAuthorName(authorId, newsId) {
     if(typeof this.props.userList[0] !== 'undefined') {
       const author = this.props.userList.find((obj) => obj._id === authorId);
       if(author) {
-        return author.profile.name
+        return <div>{author.profile.name}
+                      <button ref="spotButton" onClick={(e) => this.spotMistake(e, authorId, newsId)}>
+                Send info about mistakes
+              </button></div>
       } else {
         return <span>is no more</span>
       }
-
     }
   }
 

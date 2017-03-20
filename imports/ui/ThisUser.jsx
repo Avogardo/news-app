@@ -5,7 +5,7 @@ import Login from './Login.jsx'
 
 class ThisUser extends Component {
 
-    showEmail(user) {      
+    showEmail(user) {
         if(user.services) {
             if(user.emails) {
                 return user.emails[0].address
@@ -43,18 +43,17 @@ class ThisUser extends Component {
     guest(ownerId) {
         if(!this.props.currentUser || this.props.currentUser._id !== this.props.params.userId) {
             return <div>
-                <h1><Link to="/">Lolnet</Link></h1>
                 <Login />
             </div>
         }
-        
+
     }
 
     render() {
         return (
             <div>
                 {this.guest(this.props.params.userId)}
-                {this.renderProfile(this.props.params.userId)}                
+                {this.renderProfile(this.props.params.userId)}
             </div>
         );
     }

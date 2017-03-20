@@ -13,6 +13,7 @@
     "react-contenteditable": "^2.0.2",
     "react-dom": "^15.4.1",
     "react-router": "^3.0.0",
+    "semantic-ui-react": "^0.67.1",
     "sendgrid": "^4.8.1"
   },
   "devDependencies": {

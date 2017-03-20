@@ -5,6 +5,7 @@ import { Accounts } from 'meteor/accounts-base'
 import { createContainer } from 'meteor/react-meteor-data'
 import { News } from '../api/collectionfuncs.js';
 import NewsContainer from './NewsContainer.jsx';
+import { Header, Segment } from 'semantic-ui-react'
 
 class SignUp extends Component {
 
@@ -71,7 +72,7 @@ class SignUp extends Component {
 
     return (
       <div className="container">
-      <h1><Link to="/">Lolnet</Link></h1>
+      <Segment inverted color='violet'><Header as='h1'><Link id="logo" to="/">Fakty</Link></Header></Segment>
 
         Sign up
 

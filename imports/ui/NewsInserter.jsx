@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { News } from '../api/collectionfuncs.js';
 import Login from './Login.jsx';
 import ContentEditable from 'react-contenteditable';
-
+import { Container } from 'semantic-ui-react'
 
 class NewsInserter extends Component {
 
@@ -121,13 +121,13 @@ class NewsInserter extends Component {
   render() {
     return (
       <div>
-        <h1><Link to="/">Lolnet</Link></h1>
 
         <Login />
 
-        <p>Ony redactor can type news</p>
-        {this.redactorPanel()}
-
+        <Container text>
+          <p>Ony redactor can type news</p>
+          {this.redactorPanel()}
+        </Container>
 
         <br /><br />
         <p>Test buttons</p>

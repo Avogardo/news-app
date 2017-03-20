@@ -37,7 +37,6 @@ class Users extends Component {
     render() {
         return (
             <div>
-            <h1><Link to="/">Lolnet</Link></h1>
             <Login />
                 {!this.props.currentUser ||  this.props.currentUser._id !== this.props.params.userId?
                     <div>
